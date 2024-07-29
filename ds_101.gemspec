@@ -8,13 +8,10 @@ Gem::Specification.new do |spec|
   spec.authors = ["ShroukAbozeid"]
   spec.email = ["shrouk.dev@proton.me"]
 
-  spec.summary = "Implementing some of Data Structures in Ruby"
+  spec.summary = "A Simple Implementation of Data Structure in Ruby"
   spec.homepage = "https://github.com/ShroukAbozeid/ds_101"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.0.0"
-
-  spec.metadata["allowed_push_host"] = "TODO: Set to your gem server 'https://example.com'"
-
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/ShroukAbozeid/ds_101"
   spec.metadata["changelog_uri"] = "https://github.com/ShroukAbozeid/ds_101/blob/master/CHANGELOG.md"
@@ -30,6 +27,10 @@ Gem::Specification.new do |spec|
   spec.bindir = "exe"
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
+
+  spec.add_development_dependency "rake", "~> 13.0"
+  spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_development_dependency "rubocop", "~> 1.21"
 
   # Uncomment to register a new dependency of your gem
   # spec.add_dependency "example-gem", "~> 1.0"
