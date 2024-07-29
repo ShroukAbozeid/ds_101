@@ -2,8 +2,8 @@
 
 require "spec_helper"
 
-RSpec.describe Ds101::LinkedList::SingleLinkedList do
-  let(:list) { Ds101::LinkedList::SingleLinkedList.new }
+RSpec.describe Ds101::LinkedList::DoubleLinkedList do
+  let(:list) { Ds101::LinkedList::DoubleLinkedList.new }
 
   describe "#initialize" do
     it "should create an empty list" do
@@ -26,8 +26,13 @@ RSpec.describe Ds101::LinkedList::SingleLinkedList do
         list.append(2)
         expect(list.tail.value).to eq(2)
       end
-    end
 
+      it "updates previous tail pointers" do
+        node1 = list.append(1)
+        node2 = list.append(2)
+        expect(node2.prev).to eq(node1)
+      end
+    end
     it "increase length" do
       expect { list.append(4) }.to change(list, :length).by(1)
     end
@@ -39,79 +44,46 @@ RSpec.describe Ds101::LinkedList::SingleLinkedList do
         expect { list.remove(5) }.not_to change(list, :length)
       end
     end
-
     context "when value not found" do
       it "doesnt change length" do
         list.append(4)
         expect { list.remove(5) }.not_to change(list, :length)
       end
     end
-
     context "when value found at head" do
-      it "changes length" do
-        list.append(4)
-        expect { list.remove(4) }.to change(list, :length).by(-1)
-      end
-
-      it "updates head" do
+      before do
         list.append(4)
         list.append(5)
+      end
+      it "changes length" do
+        expect { list.remove(4) }.to change(list, :length).by(-1)
+      end
+      it "updates head" do
         list.remove(4)
         expect(list.head.value).to eq(5)
       end
-    end
-
-    context "when value is found at tail" do
-      it "changes length" do
-        list.append(5)
-        list.append(4)
-        expect { list.remove(4) }.to change(list, :length).by(-1)
-      end
-
-      it "updates tail" do
-        list.append(4)
-        list.append(6)
-        list.append(5)
-        list.remove(5)
-        expect(list.tail.value).to eq(6)
-      end
-    end
-
-    context "when value is found in the middle" do
-      it "changes length" do
-        list.append(5)
-        list.append(4)
-        list.append(6)
-        expect { list.remove(4) }.to change(list, :length).by(-1)
-      end
 
       it "updates pointers" do
-        node1 = list.append(4)
-        list.append(6)
-        node3 = list.append(5)
-        list.remove(6)
-        expect(node1.next).to eq(node3)
+        list.remove(4)
+        expect(list.head.prev).to be_nil
       end
     end
-  end
+    context "when value found at tail" do
+      before do
+        list.append(4)
+        list.append(5)
+      end
+      it "changes length" do
+        expect { list.remove(5) }.to change(list, :length).by(-1)
+      end
+      it "updates tail" do
+        list.remove(5)
+        expect(list.tail.value).to eq(4)
+      end
 
-  describe "#clear" do
-    before do
-      list.append(4)
-      list.append(5)
-      list.append(6)
-      list.clear
-    end
-    it "reset length to 0" do
-      expect(list.length).to eq(0)
-    end
-
-    it "sets tail to nil" do
-      expect(list.tail).to be_nil
-    end
-
-    it "sets head to nil" do
-      expect(list.head).to be_nil
+      it "update pointers" do
+        expect(list.tail.next).to be_nil
+      end
     end
   end
 

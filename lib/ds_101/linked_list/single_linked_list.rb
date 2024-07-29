@@ -1,12 +1,24 @@
+# frozen_string_literal: true
+
+require_relative "common"
 module Ds101
   module LinkedList
     class SingleLinkedList
+      include Ds101::LinkedList::Common
       attr_accessor :head, :tail, :length
 
       def initialize
         @head = nil
         @tail = nil
-        @length = 0 
+        @length = 0
+      end
+
+      def self.init_from_arr(arr)
+        list = SingleLinkedList.new
+        arr.each do |value|
+          list.append(value)
+        end
+        list
       end
 
       def append(value)
@@ -24,19 +36,17 @@ module Ds101
       def remove(value)
         return unless head
         return remove_head if head.value == value
-       
+
         current = head
-        while current && current.next && current.next.value != value
-          current = current.next
-        end
-        return unless (current && current.next)
-    
+        current = current.next while current&.next && current.next.value != value
+        return unless current&.next
+
         if current.next == tail
           @tail = current
         else
           current.next = current.next.next
         end
-        @length-=1
+        @length -= 1
       end
 
       def remove_head
@@ -46,63 +56,12 @@ module Ds101
         else
           @head = head.next
         end
-        @length-=1
+        @length -= 1
       end
 
-      def find(value)
-        current = head
-        while current && current.value != value
-          current = current.next
-        end
-        current
-      end
-
-      def find_by &block
-        current = head
-        while current
-          return current if block.call(current)
-          current = current.next
-        end
-        nil
-      end
-
-      def each &block
-        current = head
-        while current
-          yield current
-          current = current.next
-        end
-      end
-
-      def concat(other_list)
-        other_list.each do |node|
-          append(node.value)
-        end
-      end
-
-      def self.init_from_arr(arr)
-        list = SingleLinkedList.new
-        arr.each do |value|
-          list.append(value)
-        end
-        list
-      end
-
-      def to_a
-        arr = []
-        each do |node|
-          arr << node.value
-        end
-        arr
-      end
-
-      def clear
-        while length >0
-          remove_head
-        end
-      end
       class Node
         attr_accessor :value, :next
+
         def initialize(value:, next_node: nil)
           @value = value
           @next = next_node
